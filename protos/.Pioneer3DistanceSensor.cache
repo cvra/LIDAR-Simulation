@@ -1,0 +1,7 @@
+Webots Proto Cache File version 1.2
+protoFileHash: bef64cfc5e01b9488e0e712c75b61b92
+containsDevices: 1
+baseType: DistanceSensor
+slotType: 
+parameters: translation,rotation,name,type
+info: Distance\ssensor\sof\sthe\sPioneer\s3AT\srobot.

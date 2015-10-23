@@ -1,0 +1,7 @@
+Webots Proto Cache File version 1.2
+protoFileHash: 36e3616ebef87cee487ac567b59e96b3
+containsDevices: 1
+baseType: Camera
+slotType: 
+parameters: translation,rotation,name,noise,resolution
+info: Model\sof\sSick\sLMS291\s(Lidar\sdevice).\nWidth\sshould\sbe\stypically\s180,\s360\sor\s720\sin\sorder\sto\shave\sa\sprecision\sof\srespectively\s1°,\s0.5°\sand\s0.25°

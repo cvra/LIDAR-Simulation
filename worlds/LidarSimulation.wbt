@@ -1,0 +1,484 @@
+#VRML_SIM V8.3.0 utf8
+WorldInfo {
+  info [
+    "Simple simulation using the Sick TIM 561 to test the validity of some localization algorithms."
+    "Author: Dorian Konrad (dorian.konrad@alumni.epfl.ch)"
+    "Date: 21 Oct 2015"
+  ]
+  title "myLidar"
+  lineScale 1
+}
+Viewpoint {
+  orientation -0.625107 0.701331 0.3426 1.2759
+  position 4.26841 3.61493 2.75679
+  follow "myLidar"
+}
+Background {
+  skyColor [
+    0.362127 0.531167 0.668803
+  ]
+}
+PointLight {
+  ambientIntensity 1
+  location 1 10 0
+}
+Supervisor {
+  children [
+    Receiver {
+      channel 1
+    }
+    Display {
+      translation 1.5 0 1
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              ambientIntensity 0
+              diffuseColor 1 1 1
+              shininess 0.5
+              specularColor 0.7 0.7 0.7
+            }
+            texture ImageTexture {
+              url [
+                "textures/table.png"
+              ]
+            }
+          }
+          geometry Plane {
+            size 3 2
+          }
+        }
+      ]
+      name "ground_display"
+      locked TRUE
+      width 2046
+      height 2046
+    }
+  ]
+  boundingObject Plane {
+    size 100 100
+  }
+  locked TRUE
+  controller "Supervisor"
+}
+DEF WALL_1 Solid {
+  translation 1.5 0.1 0
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          emissiveColor 0.976471 0.968627 0.0666667
+        }
+      }
+      geometry Box {
+        size 3 0.2 0.02
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+  locked TRUE
+}
+DEF WALL_2 Solid {
+  translation 0 0.1 1
+  rotation 0 1 0 1.5708
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          emissiveColor 0.137255 0.439216 0.776471
+        }
+      }
+      geometry Box {
+        size 2 0.2 0.02
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+  locked TRUE
+}
+DEF WALL_3 Solid {
+  translation 1.5 0.1 2
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          emissiveColor 0.137255 0.435294 0.772549
+        }
+      }
+      geometry Box {
+        size 3 0.2 0.02
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+  locked TRUE
+}
+DEF WALL_4 Solid {
+  translation 3 0.1 1
+  rotation 0 1 0 1.5708
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          emissiveColor 0.972549 0.960784 0.0705882
+        }
+      }
+      geometry Box {
+        size 2 0.2 0.02
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+  locked TRUE
+}
+DEF OBSTACLE_1 Solid {
+  translation 1.5 0.17 0.75
+  children [
+    DEF OBSTACLE_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.898039 0.898039 0.898039
+          specularColor 1 1 1
+        }
+      }
+      geometry Box {
+        size 0.044 0.34 0.048
+      }
+    }
+  ]
+  boundingObject USE OBSTACLE_SHAPE
+}
+DEF OBSTACLE_2 Solid {
+  translation 1.5 0.17 1.35
+  children [
+    USE OBSTACLE_SHAPE
+  ]
+  boundingObject USE OBSTACLE_SHAPE
+}
+DEF SANDBOX Solid {
+  translation 1.54325 0.086859 1.89663
+  rotation -0.513047 0.513916 -0.687512 1.93767
+  children [
+    DEF SANDBOX_SHAPE Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.898039 0.898039 0.898039
+          specularColor 1 1 1
+        }
+      }
+      geometry Box {
+        size 0.058 0.058 0.058
+      }
+    }
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 4.16505e-05 -4.467e-06 0.000237607
+  angularVelocity 0.000794771 5.87731e-05 0.00188384
+}
+DEF SANDBOX0 Solid {
+  translation 2.92873 0.0289234 1.0923
+  rotation -1.29893e-06 1 3.96745e-06 0.159159
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 1.45812e-07 1.904e-07 3.51914e-08
+  angularVelocity 1.21349e-06 -2.11286e-16 -5.02798e-06
+}
+DEF SANDBOX1 Solid {
+  translation 1.57185 0.0288798 1.91635
+  rotation 0.00136291 0.999999 -0.000213051 0.260358
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 4.86285e-05 -2.10354e-05 0.000106787
+  angularVelocity 0.00364137 2.1758e-05 -0.00164381
+}
+DEF SANDBOX2 Solid {
+  translation 2.68396 0.0289234 0.236569
+  rotation 0.608224 0.608223 0.510028 2.19832
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 6.97432e-08 1.904e-07 -3.67263e-07
+  angularVelocity -1.26642e-05 -7.64042e-17 -2.40493e-06
+}
+DEF SANDBOX3 Solid {
+  translation 2.1758 0.0289234 -0.0566004
+  rotation 0.00704566 3.63697e-07 0.999975 -3.14159
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 3.85626e-07 1.904e-07 1.61672e-07
+  angularVelocity 5.57486e-06 -1.54695e-16 -1.32974e-05
+}
+DEF SANDBOX4 Solid {
+  translation 1.54284 0.0311822 1.83418
+  rotation 0.981042 0.192369 0.0234733 -0.0856056
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 5.11146e-05 -6.42946e-06 5.38185e-05
+  angularVelocity 0.00183841 -1.25445e-05 -0.00160252
+}
+DEF SANDBOX5 Solid {
+  translation 1.48985 0.02885 1.90256
+  rotation 0.995678 0.0666465 0.0646785 -1.57311
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 4.90007e-05 -6.58637e-05 0.000109958
+  angularVelocity 0.00370055 8.6982e-05 -0.00174807
+}
+DEF SANDBOX6 Solid {
+  translation 1.97789 0.0289233 0.575821
+  rotation -2.37087e-07 1 -6.92981e-07 1.02616
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -1.08129e-07 1.19116e-06 1.21296e-07
+  angularVelocity 4.1826e-06 -1.02896e-16 3.72859e-06
+}
+DEF SANDBOX7 Solid {
+  translation 1.68552 0.0289232 0.871456
+  rotation -3.65908e-07 1 -9.75453e-08 2.94273
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 1.594e-07 2.19192e-06 5.99906e-08
+  angularVelocity 2.06863e-06 1.99666e-16 -5.49652e-06
+}
+DEF SANDBOX8 Solid {
+  translation 1.76563 0.0289233 0.855943
+  rotation 0.999134 -3.87655e-07 0.0416029 -3.14159
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -1.59066e-07 6.90779e-07 -3.91439e-07
+  angularVelocity -1.34979e-05 5.53437e-16 5.48502e-06
+}
+DEF SANDBOX9 Solid {
+  translation 1.64469 0.0289228 1.19146
+  rotation 1.67441e-06 1 7.81755e-07 0.361951
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 3.80412e-08 5.19419e-06 -1.45439e-07
+  angularVelocity -5.01512e-06 -4.22816e-16 -1.31176e-06
+}
+DEF SANDBOX10 Solid {
+  translation 1.033 0.0289233 0.980071
+  rotation -3.84019e-07 1 -1.75846e-06 0.420359
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -1.54618e-07 6.90779e-07 7.00124e-08
+  angularVelocity 2.41421e-06 1.73227e-16 5.33164e-06
+}
+DEF SANDBOX11 Solid {
+  translation 1.37392 0.0289228 1.12093
+  rotation 0.941592 0.238121 -0.238122 1.63094
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -4.64788e-08 5.19419e-06 4.24701e-07
+  angularVelocity 1.46448e-05 1.53189e-16 1.60271e-06
+}
+DEF SANDBOX12 Solid {
+  translation 0.97272 0.0289228 1.28497
+  rotation -0.923798 0.270738 0.270737 1.64997
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -3.59242e-07 5.19419e-06 -6.90607e-07
+  angularVelocity -2.3814e-05 -1.66477e-16 1.23876e-05
+}
+DEF SANDBOX13 Solid {
+  translation 1.61343 0.0289234 1.83954
+  rotation 0.987167 -0.112921 -0.112921 -1.58371
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -4.11838e-08 1.904e-07 -3.60034e-07
+  angularVelocity -1.24149e-05 3.91254e-16 1.42013e-06
+}
+DEF SANDBOX14 Solid {
+  translation 1.41206 0.0288847 1.88762
+  rotation 0.132832 0.7008 0.700881 -2.87901
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -0.000101715 4.68137e-05 -2.92848e-05
+  angularVelocity -0.000965254 1.14866e-05 0.00352727
+}
+DEF SANDBOX15 Solid {
+  translation 1.65853 0.0289234 1.89586
+  rotation 0.222292 8.87761e-08 0.97498 3.14159
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -3.6595e-07 1.904e-07 1.2459e-07
+  angularVelocity 4.29621e-06 -7.31068e-17 1.26189e-05
+}
+DEF SANDBOX16 Solid {
+  translation 1.43954 0.0866308 1.9075
+  rotation 0.0733284 0.996555 -0.0387403 0.258255
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -0.00978151 0.00411169 -0.013786
+  angularVelocity -0.483636 -0.00422574 0.336363
+}
+DEF SANDBOX17 Solid {
+  translation 0.742524 0.0289234 0.440626
+  rotation 0.998639 -0.0368851 0.0368846 1.57216
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -9.43271e-08 1.904e-07 -1.95948e-07
+  angularVelocity -6.75681e-06 9.17123e-17 3.25265e-06
+}
+DEF SANDBOX18 Solid {
+  translation 1.7376 0.0289228 1.8279
+  rotation 0.819841 -0.404883 0.404883 1.76815
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 3.41191e-08 5.19419e-06 -4.26955e-07
+  angularVelocity -1.47225e-05 1.14042e-17 -1.17652e-06
+}
+DEF SANDBOX19 Solid {
+  translation 1.35204 0.0289232 1.82971
+  rotation 0.300975 -0.300976 0.904891 -1.67057
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 1.18137e-07 1.69154e-06 -1.99417e-07
+  angularVelocity -6.87643e-06 3.65304e-16 -4.07369e-06
+}
+DEF SANDBOX20 Solid {
+  translation 2.91015 0.0289234 0.589227
+  rotation 0.108624 -2.05413e-07 0.994083 -3.14159
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 3.72123e-07 1.904e-07 -1.3406e-07
+  angularVelocity -4.62274e-06 1.18384e-16 -1.28318e-05
+}
+DEF SANDBOX21 Solid {
+  translation 1.46813 0.0289234 1.82422
+  rotation 0.348666 0.662734 0.662734 -2.47062
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 1.01248e-07 1.904e-07 -5.32668e-08
+  angularVelocity -1.83678e-06 1.4924e-17 -3.49129e-06
+}
+DEF SANDBOX22 Solid {
+  translation 1.33768 0.0289234 1.38765
+  rotation 0.372315 0.372315 -0.850155 -1.73242
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity -5.89584e-07 1.90401e-07 -2.58201e-07
+  angularVelocity -8.90343e-06 -1.10943e-16 2.03304e-05
+}
+DEF SANDBOX23 Solid {
+  translation 1.10025 0.0289233 0.882814
+  rotation -0.252277 -0.252277 0.934191 1.63882
+  children [
+    USE SANDBOX_SHAPE
+  ]
+  boundingObject USE SANDBOX_SHAPE
+  physics Physics {
+  }
+  linearVelocity 2.33929e-07 1.19116e-06 6.31723e-08
+  angularVelocity 2.17835e-06 -1.10322e-16 -8.06649e-06
+}
+DEF MYLIDAR myLidar {
+  translation 2.5 0.02 1
+  rotation 0 1 0 1.5708
+  controller "LidarController"
+  scale 0.4 0.4 0.4
+  extensionSlot [
+    DEF SICK TiM561 {
+    }
+    Emitter {
+      channel 1
+    }
+  ]
+}

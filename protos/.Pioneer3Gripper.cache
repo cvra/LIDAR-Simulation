@@ -1,0 +1,7 @@
+Webots Proto Cache File version 1.2
+protoFileHash: 83d638f66ef0bca2e6be9fcf5d97f51c
+containsDevices: 1
+baseType: Solid
+slotType: 
+parameters: translation
+info: Physics-based\smodel\sof\sthe\sPioneer\sgripper\s(Adept\sMobile\sRobotics)
