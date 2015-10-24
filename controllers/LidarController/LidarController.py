@@ -6,14 +6,10 @@ import sys, struct, json
 
 
 class LidarController (DifferentialWheels):
-  
   timeStep = 64
   resolution = 360
   lidarValues = []
-  
-  def boundSpeed(self, speed):
-    return max(-self.maxSpeed, min(self.maxSpeed, speed))
-  
+
   def initialization(self):
     self.camera = self.getCamera('TiM561')
     self.camera.enable(2*self.timeStep)

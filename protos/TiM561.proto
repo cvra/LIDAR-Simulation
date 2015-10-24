@@ -6,7 +6,7 @@ PROTO TiM561 [
   field SFVec3f translation 0 0 0
   field SFRotation rotation  0 1 0 0
   field SFString name "TiM561"
-  field SFFloat noise 0.00005
+  field SFFloat noise 0 #0.00005
   field SFInt32 resolution 360
 ]
 {

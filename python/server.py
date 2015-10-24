@@ -4,6 +4,10 @@ import numpy as np
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 
+from MinimumAreaRectangle import MinimumAreaRectangle
+
+import pdb
+
 
 sampleinterval=0.1
 timewindow=10.
@@ -13,7 +17,7 @@ timewindow=10.
 app = QtGui.QApplication([])
 pg.setConfigOptions(antialias=True)
 plot = pg.plot(title='Lidar Polar Plot')
-plot.resize(600,400)
+plot.resize(600,600)
 plot.setAspectLocked()
 
 
@@ -34,14 +38,14 @@ def PlotPolar():
         circle.setPen(pg.mkPen(color=(60, 60, 60)))
         plot.addItem(circle)
         plot.setXRange(-3, 3)
-        plot.setYRange(-1, 3)
+        plot.setYRange(-3, 3)
 
 
 class MyUDPHandler(SocketServer.BaseRequestHandler):
 
     def handle(self):
         data = self.request[0].strip()
-        print "Lidar points: " + data
+        #print "Lidar points: " + data
 
         socket = self.request[1]
         socket.sendto(data.upper(), self.client_address)
@@ -59,11 +63,27 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
         x = radius * np.cos(theta)
         y = radius * np.sin(theta)
 
+        cloudPts = np.array([x, y]).T;
+
+
         plot.clear()
         PlotPolar()
 
+        # draw raw measure
         linePen = pg.mkPen(color=(200, 200, 200, 200), width= 2, style=QtCore.Qt.DotLine)
         plot.plot(x, y, pen=linePen,  symbol='o', symbolPen=None, symbolSize=7, symbolBrush=(255, 234, 0, 160))
+
+        MAR = MinimumAreaRectangle()
+        extremaPts = MAR.findExtrema(cloudPts)
+        # !! doesn't work well if only two side are in sight
+        cloudExtPts = MAR.keepPtsOutsideBox(cloudPts, extremaPts)
+        pts = MAR.compute2DconvexHulls(cloudExtPts)
+        rect = MAR.minimumAreaRectangle(pts)
+
+        # draw processed features
+        plot.plot(pts[:,0], pts[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(0, 255, 0, 200))
+        plot.plot(rect.points[:,0], rect.points[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(255, 0, 0, 255))
+
 
         app.processEvents()
 
