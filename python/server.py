@@ -1,16 +1,10 @@
-import SocketServer, socket, collections, random, time, math, json
+import SocketServer, socket, collections, math, json
 import numpy as np
 
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 
-from MinimumAreaRectangle import MinimumAreaRectangle
-
-import pdb
-
-
-sampleinterval=0.1
-timewindow=10.
+from lidarProcessing import Positioning
 
 
 # PyQtGraph stuff
@@ -20,6 +14,7 @@ plot = pg.plot(title='Lidar Polar Plot')
 plot.resize(600,600)
 plot.setAspectLocked()
 
+lidarProcess = Positioning()
 
 def PlotPolar():
     # Add polar grid lines
@@ -45,18 +40,14 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
 
     def handle(self):
         data = self.request[0].strip()
-        #print "Lidar points: " + data
 
         socket = self.request[1]
         socket.sendto(data.upper(), self.client_address)
 
-        frequency = 0.5
-        noise = random.normalvariate(0., 1.)
-        new = 10.*math.sin(time.time()*frequency*2*math.pi) + noise
-
         # compute polar coordinate
         radius = json.loads(data);
         radius = radius[::-1]
+
         theta = np.linspace(-0.436332313, np.pi+0.436332313, len(radius))
 
         # Transform to cartesian and plot
@@ -65,35 +56,25 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
 
         cloudPts = np.array([x, y]).T;
 
-
         plot.clear()
         PlotPolar()
 
         # draw raw measure
         linePen = pg.mkPen(color=(200, 200, 200, 200), width= 2, style=QtCore.Qt.DotLine)
         plot.plot(x, y, pen=linePen,  symbol='o', symbolPen=None, symbolSize=7, symbolBrush=(255, 234, 0, 160))
-
-        MAR = MinimumAreaRectangle()
-        extremaPts = MAR.findExtrema(cloudPts)
-        # !! doesn't work well if only two side are in sight
-        cloudExtPts = MAR.keepPtsOutsideBox(cloudPts, extremaPts)
-        pts = MAR.compute2DconvexHulls(cloudExtPts)
-        rect = MAR.minimumAreaRectangle(pts)
+        
+        lidarProcess.lidarPts = cloudPts
 
         # draw processed features
-        plot.plot(pts[:,0], pts[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(0, 255, 0, 200))
-        plot.plot(rect.points[:,0], rect.points[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(255, 0, 0, 255))
-
+        plot.plot(lidarProcess.minimalHulls[:,0], lidarProcess.minimalHulls[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(0, 255, 0, 200))
+        plot.plot(lidarProcess.rectangle.corners[:,0], lidarProcess.rectangle.corners[:,1], pen=None,  symbol='x', symbolPen=None, symbolSize=15, symbolBrush=(255, 0, 0, 255))
 
         app.processEvents()
 
 
-
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
-
     server = SocketServer.UDPServer((HOST, PORT), MyUDPHandler)
-
     server.socket.setsockopt( socket.SOL_SOCKET, socket.SO_RCVBUF, 64000)
     server.serve_forever()
 
