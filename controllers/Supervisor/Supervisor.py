@@ -3,7 +3,7 @@ import sys
 import struct
 import socket
 import json
-import numpy
+import numpy as np
 
 
 
@@ -44,10 +44,18 @@ class Supervisor (Supervisor) :
       if self.receiver.getQueueLength()>0 :
 
         message = self.receiver.getData()
+        message = json.loads(message);
+
+        translationValues = np.array(self.translationField.getSFVec3f())
+        rotationValues = np.array(self.rotationField.getSFRotation())
+
+        message = [message,translationValues.tolist(),rotationValues.tolist()]
+        message = json.dumps(message)
+
         self.receiver.nextPacket()
         
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 64000)
-        self.sock.sendto(message + "\n", (self.HOST, self.PORT))        
+        self.sock.sendto(message + "\n", (self.HOST, self.PORT))    
         received = self.sock.recv(1024)
         
       # process keyboard event to move the LIDAR 
@@ -62,33 +70,33 @@ class Supervisor (Supervisor) :
           self.movementFactor = 1
       if k==ord('A'):
         print 'translate left'
-        translationValues = numpy.array(self.translationField.getSFVec3f())
-        translationStep = numpy.array([0., 0., 0.005*self.movementFactor])
+        translationValues = np.array(self.translationField.getSFVec3f())
+        translationStep = np.array([0., 0., 0.005*self.movementFactor])
         self.translationField.setSFVec3f((translationValues + translationStep).tolist());
       elif k==ord('D'):
         print 'translate right'
-        translationValues = numpy.array(self.translationField.getSFVec3f())
-        translationStep = numpy.array([0., 0., -0.005*self.movementFactor])
+        translationValues = np.array(self.translationField.getSFVec3f())
+        translationStep = np.array([0., 0., -0.005*self.movementFactor])
         self.translationField.setSFVec3f((translationValues + translationStep).tolist());
       elif k==ord('W'):
         print 'translate front'
-        translationValues = numpy.array(self.translationField.getSFVec3f())
-        translationStep = numpy.array([-0.005*self.movementFactor, 0., 0.])
+        translationValues = np.array(self.translationField.getSFVec3f())
+        translationStep = np.array([-0.005*self.movementFactor, 0., 0.])
         self.translationField.setSFVec3f((translationValues + translationStep).tolist());
       elif k==ord('S'):
         print 'translate rear'
-        translationValues = numpy.array(self.translationField.getSFVec3f())
-        translationStep = numpy.array([0.005*self.movementFactor, 0., 0.])
+        translationValues = np.array(self.translationField.getSFVec3f())
+        translationStep = np.array([0.005*self.movementFactor, 0., 0.])
         self.translationField.setSFVec3f((translationValues + translationStep).tolist());
       elif k==ord('J'):
         print 'rotate left'
         rotationValues = self.rotationField.getSFRotation()
-        rotationStep = numpy.array([0.,0.,0.,0.02*self.movementFactor])
+        rotationStep = np.array([0.,0.,0.,0.02*self.movementFactor])
         self.rotationField.setSFRotation((rotationValues + rotationStep).tolist());
       elif k==ord('L'):
         print 'rotate right'
         rotationValues = self.rotationField.getSFRotation()
-        rotationStep = numpy.array([0.,0.,0.,-0.02*self.movementFactor])
+        rotationStep = np.array([0.,0.,0.,-0.02*self.movementFactor])
         self.rotationField.setSFRotation((rotationValues + rotationStep).tolist());
         
       if self.step(self.timeStep) == -1: break
