@@ -5,7 +5,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 
 from lidarProcessing import Positioning
-
+import pdb
 
 # PyQtGraph stuff
 app = QtGui.QApplication([])
@@ -45,7 +45,14 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
         socket.sendto(data.upper(), self.client_address)
 
         # compute polar coordinate
-        radius = json.loads(data);
+        data = json.loads(data);
+
+        radius = data[0]
+        
+        #pdb.set_trace()
+        robotPosition = np.array([data[1][i] for i in (0,2)])
+        robotOrientation = np.array(data[2][3])
+
         radius = radius[::-1]
 
         theta = np.linspace(-0.436332313, np.pi+0.436332313, len(radius))
@@ -63,8 +70,13 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
         linePen = pg.mkPen(color=(200, 200, 200, 200), width= 2, style=QtCore.Qt.DotLine)
         plot.plot(x, y, pen=linePen,  symbol='o', symbolPen=None, symbolSize=7, symbolBrush=(255, 234, 0, 160))
         
+        lidarProcess.estimatedPos = robotPosition
+        lidarProcess.estimatedRot = robotOrientation
         lidarProcess.lidarPts = cloudPts
 
+        trueTable = lidarProcess.estimatedPosInRobotRef()
+        plot.plot(trueTable.corners[:,0], trueTable.corners[:,1], pen=None,  symbol='x', symbolPen=None, symbolSize=15, symbolBrush=(0, 0, 255, 200))
+        
         # draw processed features
         plot.plot(lidarProcess.minimalHulls[:,0], lidarProcess.minimalHulls[:,1], pen=None,  symbol='o', symbolPen=None, symbolSize=10, symbolBrush=(0, 255, 0, 200))
         plot.plot(lidarProcess.rectangle.corners[:,0], lidarProcess.rectangle.corners[:,1], pen=None,  symbol='x', symbolPen=None, symbolSize=15, symbolBrush=(255, 0, 0, 255))
