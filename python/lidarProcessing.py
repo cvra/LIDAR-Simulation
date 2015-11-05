@@ -4,10 +4,14 @@ import matplotlib.path as mplPath
 
 from hull import convex_hull
 from rectangle import RectangleInfo
+import pdb
 
 THRESHOLD_ALPHA = 0.3 
 THRESHOLD_BETA  = 0.3 * 0.25
 THRESHOLD_GAMMA = 0.3 * 0.4
+
+TABLE_WIDTH  = 3 # in meter
+TABLE_HEIGHT = 2
 
 
 def findExtrema(cloud):
@@ -51,28 +55,35 @@ def rotatePolygon(polygon,theta):
 	rotMat = np.asmatrix([[cosTheta, -sinTheta],[sinTheta, cosTheta]])
 	return np.asarray(np.dot(rotMat, polygon.T).T)
 
-def isRecangleValide(corners, hulls):
+def validateRectangle(corners, hulls):
 	ptsPerSide = [0, 0, 0, 0]
+	isCornerValide = [False,False,False,False]
 
 	for i in range(0, 4):
 		for j in range(0, hulls.shape[0]):
 			if isCollinear(corners[i,:], corners[i-1,:], hulls[j,:], 0.025):
 				ptsPerSide[i] += 1
 
+	#pdb.set_trace()
+
 	if sum(ptsPerSide) < hulls.shape[0] * THRESHOLD_ALPHA:
-		return False
+		return (False, isCornerValide)
 
 	if sorted(ptsPerSide)[-2] < hulls.shape[0] * THRESHOLD_BETA:
 		if sum(sorted(ptsPerSide)[-3:-1]) < hulls.shape[0] * THRESHOLD_GAMMA:
-			return False
+			return (False, isCornerValide)
 
+	for i in range(0, 4):
+		if (ptsPerSide[i-1] > hulls.shape[0] * THRESHOLD_BETA) & (ptsPerSide[i] > hulls.shape[0] * THRESHOLD_BETA):
+			isCornerValide[i] = True
 
-	return True
+	return (True, isCornerValide)
 
 def minimumAreaRectangle(polygon, fullHulls):
 	areaMin = sys.float_info.max
-	bestRectangle = RectangleInfo(np.zeros([4, 2])) 
-	rectangle = RectangleInfo(np.zeros([4, 2])) 
+	bestRectangle = RectangleInfo() 
+	rectangle = RectangleInfo() 
+	bestCornersValidity = [None] * 4
 
 	for i in range(0, polygon.shape[0]):
 		diff = polygon[i,:] - polygon[i-1,:]
@@ -96,17 +107,34 @@ def minimumAreaRectangle(polygon, fullHulls):
 
 			rectangle.corners = rect
 
-			if isRecangleValide(rect, fullHulls):
+			isRectangleValide, areCornerValid = validateRectangle(rect, fullHulls)
+			
+			if isRectangleValide:
 				areaMin = area
 				bestRectangle.corners = rect
+				bestCornersValidity   = [areCornerValid[i] for i in bestRectangle.permutation]
+
+	print bestRectangle.corners
+	print bestCornersValidity
 
 	return bestRectangle
 
+def adjustPos(pos, rot, rectangle):
+	corners = np.array([(0,0), (TABLE_WIDTH,0), (TABLE_WIDTH,TABLE_HEIGHT), (0,TABLE_HEIGHT),]);
+	corners = corners - pos
+	rotatePolygon(corners, rot)
+
+	#print corners
+	#print rectangle.corners
+
+
+
 class Positioning(object):
 
-	def __init__(self, lidarPts=np.zeros([1, 2]), estimatedPos=np.zeros([1, 2])):
-		self.lidarPts = lidarPts
+	def __init__(self, lidarPts=np.zeros([1, 2]), estimatedPos=np.zeros([1, 2]), estimatedRot=np.zeros([1, 1])):
 		self.estimatedPos = estimatedPos
+		self.estimatedRot = estimatedRot
+		self.lidarPts = lidarPts
 
 	@property
 	def lidarPts(self):
@@ -119,11 +147,19 @@ class Positioning(object):
 
 	@property
 	def estimatedPos(self):
-		return self._points
+		return self._estimatedPos
 
 	@estimatedPos.setter
 	def estimatedPos(self, value):
-		self._pestimatedPos = value
+		self._estimatedPos = value
+
+	@property
+	def estimatedRot(self):
+		return self._estimatedRot
+
+	@estimatedRot.setter
+	def estimatedRot(self, value):
+		self._estimatedRot = value
 
 	@property
 	def minimalHulls(self):
@@ -138,4 +174,24 @@ class Positioning(object):
 		cleanHulls = removeCollinearPts(hulls, 0.02);
 		self._minimalHulls = cleanHulls
 		self._rectangle =  minimumAreaRectangle(cleanHulls, self._lidarPts)
+
+		adjustPos(self._estimatedPos, self._estimatedRot, self._rectangle)
+
+	def estimatedPosInRobotRef(self):
+		rectangle = RectangleInfo() 
+
+		corners = np.array([(0,0), (TABLE_WIDTH,0), (TABLE_WIDTH,TABLE_HEIGHT), (0,TABLE_HEIGHT),]);
+		corners = corners - self._estimatedPos
+		corners[:,0] = -corners[:,0]
+		corners = rotatePolygon(corners, -self._estimatedRot)
+
+		rectangle.corners = corners
+
+		return rectangle
+
+
+
+
+
+
 
