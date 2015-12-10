@@ -7,7 +7,7 @@ PROTO TiM561 [
   field SFRotation rotation  0 1 0 0
   field SFString name "TiM561"
   field SFFloat noise 0.00005
-  field SFInt32 resolution 180 # 360
+  field SFInt32 resolution 811
 ]
 {
   Camera {
@@ -1036,9 +1036,8 @@ PROTO TiM561 [
     ]
     name IS name
 
-    # The field of view should be 260° for the Sick Tim561
-    # but in our case we only have 230° because of the mechanics.
-    fieldOfView 4.0142572796
+    # The field of view should be 270° for the Sick Tim561
+    fieldOfView 4.7123889804
     
     width IS resolution
     height 1

@@ -5,12 +5,9 @@ import socket
 import json
 import numpy as np
 
-
-
-
 class Supervisor (Supervisor) :
   timeStep = 64
-  resolution = 360
+  resolution = 811
   movementFactor = 1
   
   def initialization(self):
@@ -49,14 +46,18 @@ class Supervisor (Supervisor) :
         translationValues = np.array(self.translationField.getSFVec3f())
         rotationValues = np.array(self.rotationField.getSFRotation())
 
-        message = [message,translationValues.tolist(),rotationValues.tolist()]
-        message = json.dumps(message)
+        #message = [message,translationValues.tolist(),rotationValues.tolist()]
+        #message = json.dumps(message)
+
+        message = message[::-1]
+        message = struct.pack('f'*len(message), *message)
 
         self.receiver.nextPacket()
         
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 64000)
-        self.sock.sendto(message + "\n", (self.HOST, self.PORT))    
-        received = self.sock.recv(1024)
+        self.sock.sendto(message, (self.HOST, self.PORT))  
+
+        print('message sent, len = ' + str(len(message)))
         
       # process keyboard event to move the LIDAR 
       k = self.keyboardGetKey()
