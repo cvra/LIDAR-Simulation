@@ -38,5 +38,9 @@
         </collision>
       </link>
     </model>
+    <!-- Robot -->
+    <include>
+      <uri>file://robot</uri>
+    </include>
   </world>
 </sdf>
