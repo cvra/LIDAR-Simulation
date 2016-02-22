@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="eurobot2016">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!-- Eurobot table -->
+    <model name="table">
+      <pose>0 0 1  1.5708 0 0</pose>
+      <static>true</static>
+      <link name="body">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file://worlds/table.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Yellow</name>
+            </script>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file://worlds/table.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+  </world>
+</sdf>
