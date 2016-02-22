@@ -18,7 +18,7 @@
       <collision name="collision">
         <geometry>
           <box>
-            <size>0.1 0.1 0.07</size>
+            <size>0.03 0.03 0.07</size>
           </box>
         </geometry>
       </collision>
@@ -40,26 +40,26 @@
         <ray>
           <scan>
             <horizontal>
-              <samples>640</samples>
+              <samples>813</samples>
               <resolution>1</resolution>
-              <min_angle>-2.26889</min_angle>
-              <max_angle>2.268899</max_angle>
+              <min_angle>-2.357</min_angle>
+              <max_angle>2.357</max_angle>
             </horizontal>
           </scan>
           <range>
-            <min>0.08</min>
+            <min>0.05</min>
             <max>10</max>
             <resolution>0.01</resolution>
           </range>
           <noise>
             <type>gaussian</type>
             <mean>0.0</mean>
-            <stddev>0.01</stddev>
+            <stddev>0.005</stddev>
           </noise>
         </ray>
         <plugin name="laser" filename="libRayPlugin.so" />
         <always_on>1</always_on>
-        <update_rate>30</update_rate>
+        <update_rate>15</update_rate>
         <visualize>true</visualize>
       </sensor>
     </link>
