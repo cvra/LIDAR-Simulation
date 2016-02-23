@@ -13,8 +13,16 @@ include_directories(${GAZEBO_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
-add_executable(listener listener.cpp)
-target_link_libraries(listener
+add_executable(robotpose robotpose.cpp)
+target_link_libraries(robotpose
+    ${GAZEBO_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${PROTUBUF_LIBRARIES}
+    pthread
+)
+
+add_executable(laserscan laserscan.cpp)
+target_link_libraries(laserscan
     ${GAZEBO_LIBRARIES}
     ${Boost_LIBRARIES}
     ${PROTUBUF_LIBRARIES}
