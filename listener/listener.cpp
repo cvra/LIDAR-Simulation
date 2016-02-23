@@ -43,8 +43,8 @@ void robot_callback(ConstPosesStampedPtr &msg)
     for (int index = 0; index < msg->pose_size(); index++) {
 
         if (msg->pose(index).name() == "robot") {
-            std::cout << "[" << laser_time << "] Robot pose received!" << std::endl;
             robot_time = msg->time().sec() + msg->time().nsec() / 1e9;
+            std::cout << "[" << robot_time << "] Robot pose received!" << std::endl;
 
             robot_position[0] = msg->pose(index).position().x();
             robot_position[1] = msg->pose(index).position().y();
