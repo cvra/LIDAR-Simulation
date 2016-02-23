@@ -1,6 +1,12 @@
+#include <gazebo/gazebo_config.h>
 #include <gazebo/transport/transport.hh>
 #include <gazebo/msgs/msgs.hh>
+
+#if GAZEBO_MAJOR_VERSION >= 6
+#include <gazebo/gazebo_client.hh>
+#else
 #include <gazebo/gazebo.hh>
+#endif
 
 #include <iostream>
 #include <cstring>
@@ -59,7 +65,11 @@ void robot_callback(ConstPosesStampedPtr &msg)
 
 int main(int argc, char **argv)
 {
+#if GAZEBO_MAJOR_VERSION >= 6
+    gazebo::client::setup(argc, argv);
+#else
     gazebo::setupClient(argc, argv);
+#endif
 
     gazebo::transport::NodePtr node(new gazebo::transport::Node());
     node->Init();
@@ -78,5 +88,9 @@ int main(int argc, char **argv)
         gazebo::common::Time::MSleep(10);
     }
 
+#if GAZEBO_MAJOR_VERSION >= 6
+    gazebo::client::shutdown();
+#else
     gazebo::shutdown();
+#endif
 }
