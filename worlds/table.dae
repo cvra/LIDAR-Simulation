@@ -1,8 +1,8 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
-    <created>2016-02-22T19:19:25.832138</created>
-    <modified>2016-02-22T19:19:25.832163</modified>
-    <unit name="centimeter" meter="0.01"/>
+    <created>2016-02-23T22:10:58.748898</created>
+    <modified>2016-02-23T22:10:58.748953</modified>
+    <unit name="millimeter" meter="0.001"/>
     <up_axis>Y_UP</up_axis>
   </asset>
   <library_effects>

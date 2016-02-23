@@ -17,7 +17,6 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
               <uri>file://worlds/table.dae</uri>
             </mesh>
           </geometry>
@@ -31,7 +30,6 @@
         <collision name="collision">
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
               <uri>file://worlds/table.dae</uri>
             </mesh>
           </geometry>
