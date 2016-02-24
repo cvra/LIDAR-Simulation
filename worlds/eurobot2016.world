@@ -11,7 +11,7 @@
     </include>
     <!-- Eurobot table -->
     <model name="table">
-      <pose>0 0 1  1.5708 0 0</pose>
+      <pose>0 0 0.01  0 0 0</pose>
       <static>true</static>
       <link name="body">
         <visual name="visual">
