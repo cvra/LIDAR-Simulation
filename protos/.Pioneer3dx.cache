@@ -1,7 +1,0 @@
-Webots Proto Cache File version 1.2
-protoFileHash: d5730f2124026103689ff84f3376906c
-containsDevices: 1
-baseType: Robot
-slotType: 
-parameters: translation,rotation,name,controller,controllerArgs,synchronization,extensionSlot
-info: Pioneer\s3-DX\swith\sblinking\sLEDs
